@@ -2,6 +2,39 @@ const { User, Thought } = require('../models');
 
 
 const thoughtController = {
+
+  // Get All Thoughts
+  getAllThoughts(req, res) {
+    Thought.find({})
+      .populate({
+        path: 'username',
+        select: '-__v'
+      })
+      .select('-__v')
+      .then(dbThoughtData => res.json(dbThoughtData))
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(400);
+    });
+  },
+
+  // get thought by id
+  getThoughtById({ params }, res) {
+    Thought.findById({ _id: params.thoughtId})
+      .populate({
+        path: 'username',
+        select: '__v'
+      })
+      .select('-__v')
+      .then(dbThoughtData => {
+        if(!dbThoughtData) {
+          return res.status(404).json({ message: 'No thought found with this id!' });
+        }
+        res.json(dbThoughtData);
+      })
+      .catch(err => res.json(err));
+  },
+
   // add thoughts to user
   addThought({ params, body}, res) {
     console.log(body);

@@ -58,13 +58,42 @@ const userController = {
 
     // delete user
     deleteUser({ params }, res) {
-        Pizza.findOneAndDelete({
-                _id: params.id
+        User.findOneAndDelete({ _id: params.id })
+            .then(dbUserData => {
+                if(!dbUserData) {
+                    return res.status(404).json({ message: 'No user found wit this id!'})
+                }
+                res.json(dbUserData);
             })
+            .catch(err => res.json(err));
+        },
+
+        //create friend
+        addFriend({ params, body }, res) {
+            User.findOneAndUpdate(
+                { _id: params.id },
+                { $push: { friends: body} },
+                { new: true }
+            )
+            .then(dbUserData => {
+                if(!dbUserData) {
+                    return res.status(404).json({ message: 'No user found wit this id!'})
+                }
+                res.json(dbUserData);
+            })
+            .catch(err => res.json(err));
+        },
+        // remove Friend
+        deleteFriend({ params }, res) {
+            User.findOneAndUpdate(
+            { _id: params.commentId },
+            { $pull: { friends: { friendId: params.friendId } } },
+            { new: true }
+            )
             .then(dbUserData => res.json(dbUserData))
             .catch(err => res.json(err));
-    }
-
-};
-
-module.exports = userController; 
+        }
+    
+    };
+    
+    module.exports = userController;
