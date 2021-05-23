@@ -1,24 +1,4 @@
-const { Schema, model, Types } = require('mongoose');
-
-const FriendSchema = new Schema(
-    {
-        friendId: {
-            type: Schema.Types.ObjectId,
-            default: () => new Types.ObjectId()
-        },
-        username: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-
-    },
-    {
-        toJSON: {
-          virtuals: true
-        },
-        id: false
-      }
-)
+const { Schema , model, Types } = require('mongoose');
 
 const UserSchema = new Schema(
     {
@@ -42,7 +22,12 @@ const UserSchema = new Schema(
                 ref: 'Thought'
             }
         ],
-        friends: [FriendSchema],
+        friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
     {
       toJSON: {
@@ -58,4 +43,4 @@ UserSchema.virtual('friendCount').get(function() {
 
 const User = model('User', UserSchema);
 
-module.exports = {User}; 
+module.exports = User;
