@@ -39,8 +39,6 @@ const ThoughtSchema = new Schema(
             required: true,
             minLength: 1,
             maxLength: 280
-
-
         },
         createdAt: {
             type: Date,
@@ -51,7 +49,8 @@ const ThoughtSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        reactions: [reactionSchema]
+        // use ReactionSchema
+        reactions: [ReactionSchema]
     },
     {
       toJSON: {

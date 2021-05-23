@@ -7,7 +7,7 @@ const userController = {
         User.find({})
             .populate({
                 path: 'thoughts',
-                selet: '-__v'
+                select: '-__v'
             })
             .select('-__v')
             .then(dbUserData => res.json(dbUserData))
@@ -18,9 +18,7 @@ const userController = {
     },
 
     // get one User by id
-    getUserById({
-        params
-    }, res) {
+    getUserById({ params }, res) {
         User.findOne({
                 _id: params.id
             })
@@ -37,19 +35,14 @@ const userController = {
     },
 
     // create a new User
-    createUser({
-        body
-    }, res) {
+    createUser({ body }, res) {
         User.create(body)
             .then(dbUserData => res.json(dbUserData))
             .catch(err => res.json(err));
     },
 
     // update User by id
-    updateUser({
-        params,
-        body
-    }, res) {
+    updateUser({ params, body }, res) {
         User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
             .then(dbUserData => {
                 if (!dbUserData) {
